@@ -1,11 +1,11 @@
 window.ironListConnector = {
   initLazy: function(list) {
     const extraItemsBuffer = 20;
-    
+
     let lastRequestedRange = [0, 0];
 
     list.$connector = {};
-    
+
     const updateRequestedItem = function() {
         /* 
          * TODO Iron list seems to do a small index adjustment after scrolling
@@ -24,7 +24,7 @@ window.ironListConnector = {
           lastRequestedRange = [first, last];
           const count = 1 + last - first;
           list.$server.setRequestedRange(first, count);
-        }    	
+        }
     }
     
     let requestDebounce;
@@ -34,7 +34,7 @@ window.ironListConnector = {
                   Polymer.Async.timeOut.after(10),
                   updateRequestedItem);
     }
-    
+
     /*
      * Ensure all items that iron list will be looking at are actually defined.
      * If this is not done, the component will keep looking ahead through the
@@ -53,9 +53,9 @@ window.ironListConnector = {
                 list.items[start + i] = {__placeholder: true};
             }
         }
-        
+
         originalAssign.apply(list, arguments);
-        
+
         /*
          * TODO: Keep track of placeholder items in the "active" range and
          * avoid deleting them so that the next pass will be faster. Instead,
@@ -65,7 +65,7 @@ window.ironListConnector = {
         for(let i = 0; i < tempItems.length; i++) {
             delete list.items[start + tempItems[i]];
         }
-        
+
         /*
          * Check if we need to do anything once things have settled down.
          * This method is called multiple times in sequence for the same user
@@ -73,7 +73,7 @@ window.ironListConnector = {
          */
         scheduleUpdateRequest();
     }
-    
+
     list.items = [];
 
     list.$connector.set = function(index, items) {
@@ -114,7 +114,7 @@ window.ironListConnector = {
         for(let i = 0; i < length; i++) {
             const itemsIndex = index + i;
             delete list.items[itemsIndex];
-            
+
             // Most likely a no-op since the affected index isn't in view
             list.notifyPath("items." + itemsIndex)
         }
@@ -124,7 +124,7 @@ window.ironListConnector = {
         const delta = newSize - list.items.length;
         if (delta > 0) {
             list.items.length = newSize;
-            
+
             list.notifySplices("items", [{index: newSize - delta, removed: [], addedCount : delta, object: list.items, type: "splice"}]);
         } else if (delta < 0){
             const removed = list.items.slice(newSize, list.items.length);
