@@ -135,8 +135,6 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
                         () -> ui.getPage().executeJavaScript(
                                 "window.ironListConnector.initLazy($0)",
                                 getElement())));
-
-        getDataCommunicator().setRequestedRange(0, 50);
     }
 
     @Override

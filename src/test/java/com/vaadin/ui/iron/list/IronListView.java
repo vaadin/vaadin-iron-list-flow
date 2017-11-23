@@ -45,7 +45,7 @@ public class IronListView extends DemoView {
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
         createStringList();
         createStringListWithDataProvider();
         createPeopleListWithDataProvider();
