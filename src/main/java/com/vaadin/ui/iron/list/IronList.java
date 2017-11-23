@@ -32,10 +32,12 @@ import com.vaadin.function.ValueProvider;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
+import com.vaadin.ui.common.Focusable;
 import com.vaadin.ui.common.HasSize;
 import com.vaadin.ui.common.HasStyle;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.common.JavaScript;
+import com.vaadin.ui.renderers.ComponentRenderer;
 import com.vaadin.ui.renderers.TemplateRenderer;
 import com.vaadin.util.JsonSerializer;
 
@@ -69,8 +71,8 @@ import elemental.json.JsonValue;
 @Tag("iron-list")
 @HtmlImport("frontend://bower_components/iron-list/iron-list.html")
 @JavaScript("frontend://ironListConnector.js")
-public class IronList<T> extends Component
-        implements HasDataProvider<T>, HasStyle, HasSize {
+public class IronList<T> extends Component implements HasDataProvider<T>,
+        HasStyle, HasSize, Focusable<IronList<T>> {
 
     private final class UpdateQueue implements Update {
         private List<Runnable> queue = new ArrayList<>();
@@ -173,20 +175,26 @@ public class IronList<T> extends Component
     public void setRenderer(ValueProvider<T, String> valueProvider) {
         Objects.requireNonNull(valueProvider,
                 "The valueProvider must not be null");
-        this.setRenderer(TemplateRenderer.of("[[item.label]]")
-                .withProperty("label", (ValueProvider) valueProvider));
+        this.setRenderer(TemplateRenderer.<T> of("[[item.label]]")
+                .withProperty("label", valueProvider));
     }
 
     /**
      * Sets a renderer for the items in the list, by using a
      * {@link TemplateRenderer}. The template returned by the renderer is used
      * to render each item.
+     * <p>
+     * Note: {@link ComponentRenderer}s are not supported yet.
      * 
      * @param renderer
      *            a renderer for the items in the list, not <code>null</code>
      */
     public void setRenderer(TemplateRenderer<T> renderer) {
         Objects.requireNonNull(renderer, "The renderer must not be null");
+        if (renderer instanceof ComponentRenderer) {
+            throw new UnsupportedOperationException(
+                    "ComponentRenderers are not supported yet");
+        }
         this.renderer = renderer;
 
         /**
@@ -202,6 +210,7 @@ public class IronList<T> extends Component
             + "</span>",
         //@formatter:on
                 renderer.getTemplate()));
+        getDataCommunicator().reset();
     }
 
     /**
@@ -232,5 +241,4 @@ public class IronList<T> extends Component
     private void setRequestedRange(int start, int length) {
         getDataCommunicator().setRequestedRange(start, length);
     }
-
 }
