@@ -141,6 +141,33 @@ public class IronListIT extends AbstractComponentIT {
                 "Item ");
     }
 
+    @Test
+    public void templateWithEventHandlers() {
+        WebElement list = findElement(By.id("template-events"));
+        WebElement message = findElement(By.id("template-events-message"));
+
+        JsonArray items = getItems(list);
+        assertItemsArePresent(items, 0, 3, "Clickable item ");
+
+        // clicks on the first item to remove it
+        WebElement item = findElement(By.id("template-events-item-0"));
+        scrollIntoViewAndClick(item);
+        waitUntil(driver -> getItems(list).length() == 2);
+        Assert.assertEquals("Clickable item 1 removed", message.getText());
+
+        // clicks on the last item to remove it
+        item = findElement(By.id("template-events-item-1"));
+        scrollIntoViewAndClick(item);
+        waitUntil(driver -> getItems(list).length() == 1);
+        Assert.assertEquals("Clickable item 3 removed", message.getText());
+
+        // clicks on the first item again to remove it
+        item = findElement(By.id("template-events-item-0"));
+        scrollIntoViewAndClick(item);
+        waitUntil(driver -> getItems(list).length() == 0);
+        Assert.assertEquals("Clickable item 2 removed", message.getText());
+    }
+
     private void assertItemsArePresent(JsonArray items, int startingIndex,
             int endingIndex, String itemLabelprefix) {
 

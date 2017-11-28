@@ -18,8 +18,11 @@ package com.vaadin.ui.iron.list;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -32,6 +35,7 @@ import com.vaadin.function.ValueProvider;
 import com.vaadin.router.Route;
 import com.vaadin.router.RouteAlias;
 import com.vaadin.ui.html.Label;
+import com.vaadin.ui.html.NativeButton;
 import com.vaadin.ui.renderers.TemplateRenderer;
 
 @Route("")
@@ -93,6 +97,7 @@ public class IronListView extends DemoView {
         createStringListWithDataProvider();
         createPeopleListWithDataProvider();
         createChuckNorrisFacts();
+        createRankedListWithEventHandling();
     }
 
     private void createStringList() {
@@ -181,6 +186,63 @@ public class IronListView extends DemoView {
                 new Label("List of people with grid layout"), list);
     }
 
+    private void createRankedListWithEventHandling() {
+        // begin-source-example
+        // source-example-heading: Using events with templates
+        IronList<String> list = new IronList<>();
+        list.setHeight("400px");
+        list.getStyle().set("border", "1px solid lightgray");
+
+        List<String> items = getLordOfTheRingsCharacters();
+        list.setItems(items);
+
+        /*
+         * The name of the event handlers defined at 'on-click' are used inside
+         * the 'withEventHandler' calls.
+         */
+        list.setRenderer(TemplateRenderer.<String> of(
+                "<div style='display:flex; justify-content:space-between; padding:10px;'>"
+                        + "<div style='flex-grow:1'>#[[item.rank]]: [[item.name]]</div>"
+                        + "<div><button on-click='up' hidden='[[item.upHidden]]'>&uarr;</button>"
+                        + "<button on-click='down' hidden='[[item.downHidden]]'>&darr;</button>"
+                        + "<button on-click='remove' style='color:red'>X</button></div>"
+                        + "<div>")
+                .withProperty("name", ValueProvider.identity())
+                .withProperty("rank", item -> items.indexOf(item) + 1)
+                .withProperty("upHidden", item -> items.indexOf(item) == 0)
+                .withProperty("downHidden",
+                        item -> items.indexOf(item) == items.size() - 1)
+                .withEventHandler("up", item -> {
+                    int previousRank = items.indexOf(item);
+                    if (previousRank == 0) {
+                        return;
+                    }
+                    String previousItem = items.set(previousRank - 1, item);
+                    items.set(previousRank, previousItem);
+                    list.getDataCommunicator().reset();
+                }).withEventHandler("down", item -> {
+                    int previousRank = items.indexOf(item);
+                    if (previousRank == items.size() - 1) {
+                        return;
+                    }
+                    String previousItem = items.set(previousRank + 1, item);
+                    items.set(previousRank, previousItem);
+                    list.getDataCommunicator().reset();
+                }).withEventHandler("remove", item -> {
+                    items.remove(item);
+                    list.getDataCommunicator().reset();
+                }));
+        // end-source-example
+
+        addCard("Using templates", "Using events with templates", new Label(
+                "Rank up/down your favorite Lord of the Rings characters"),
+                list, new NativeButton("Reset", evt -> {
+                    items.clear();
+                    items.addAll(getLordOfTheRingsCharacters());
+                    list.getDataCommunicator().reset();
+                }));
+    }
+
     private Stream<String> queryStringsFromDatabase(Query<String, Void> query) {
         return LIST_OF_BOOKS
                 .subList(Math.min(query.getOffset(), LIST_OF_BOOKS.size() - 1),
@@ -191,6 +253,19 @@ public class IronListView extends DemoView {
 
     private int countStringsFromDatabase(Query<String, Void> query) {
         return LIST_OF_BOOKS.size();
+    }
+
+    private List<String> getLordOfTheRingsCharacters() {
+        Set<String> characters = new HashSet<>();
+
+        Faker instance = Faker.instance(new Random(42));
+        for (int i = 0; i < 100; i++) {
+            characters.add(instance.lordOfTheRings().character());
+        }
+
+        List<String> list = new ArrayList<>(characters);
+        Collections.sort(list);
+        return list;
     }
 
     private static Stream<String> createFacts(int number) {
