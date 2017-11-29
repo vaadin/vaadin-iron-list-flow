@@ -111,6 +111,7 @@ public class IronListView extends DemoView {
         list.setItems(items);
         // end-source-example
 
+        list.setId("list-of-strings");
         addCard("List of strings", list);
     }
 
@@ -128,6 +129,7 @@ public class IronListView extends DemoView {
         list.setDataProvider(dataProvider);
         // end-source-example
 
+        list.setId("list-of-strings-with-dataprovider");
         addCard("List of strings with DataProvider",
                 new Label("List of books lazy loaded from the database"), list);
     }
@@ -149,6 +151,7 @@ public class IronListView extends DemoView {
                 .withProperty("fact", ValueProvider.identity()));
         // end-source-example
 
+        list.setId("chuck-norris-facts");
         addCard("Using templates", "List of random Chuck Norris facts", list);
     }
 
@@ -182,6 +185,7 @@ public class IronListView extends DemoView {
         // end-source-example
         //@formatter:on
 
+        list.setId("list-of-people-with-dataprovider");
         addCard("Using templates", "List of people with DataProvider",
                 new Label("List of people with grid layout"), list);
     }
@@ -234,6 +238,7 @@ public class IronListView extends DemoView {
                 }));
         // end-source-example
 
+        list.setId("using-events-with-templates");
         addCard("Using templates", "Using events with templates", new Label(
                 "Rank up/down your favorite Lord of the Rings characters"),
                 list, new NativeButton("Reset", evt -> {
