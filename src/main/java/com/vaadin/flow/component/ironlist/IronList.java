@@ -36,11 +36,11 @@ import com.vaadin.flow.data.provider.DataGenerator;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.internal.JsonSerializer;
+import com.vaadin.flow.internal.JsonUtils;
 import com.vaadin.flow.renderer.ComponentRenderer;
 import com.vaadin.flow.renderer.TemplateRenderer;
 import com.vaadin.flow.renderer.TemplateRendererUtil;
-import com.vaadin.flow.util.JsonSerializer;
-import com.vaadin.flow.util.JsonUtils;
 
 import elemental.json.JsonObject;
 import elemental.json.JsonValue;
