@@ -36,7 +36,6 @@ import com.vaadin.flow.data.provider.ComponentDataGenerator;
 import com.vaadin.flow.data.provider.CompositeDataGenerator;
 import com.vaadin.flow.data.provider.DataCommunicator;
 import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.data.provider.KeyMapper;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.internal.JsonSerializer;
@@ -115,11 +114,11 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
     private TemplateRenderer<T> renderer;
     private String placeholderTemplate;
 
-    private final CompositeDataGenerator<T> listDataGenerator = new CompositeDataGenerator<>();
+    private final CompositeDataGenerator<T> dataGenerator = new CompositeDataGenerator<>();
     private Registration dataGeneratorRegistration;
 
     private final DataCommunicator<T> dataCommunicator = new DataCommunicator<>(
-            listDataGenerator, arrayUpdater,
+            dataGenerator, arrayUpdater,
             data -> getElement().callFunction("$connector.updateData", data),
             getElement().getNode());
 
@@ -127,7 +126,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
      * Creates an empty list.
      */
     public IronList() {
-        listDataGenerator.addDataGenerator(
+        dataGenerator.addDataGenerator(
                 (item, jsonObject) -> renderer.getValueProviders()
                         .forEach((property, provider) -> jsonObject.put(
                                 property,
@@ -298,8 +297,8 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         componentRenderer.setTemplateAttribute("appid", appId);
         componentRenderer.setTemplateAttribute("nodeid", "[[item.nodeId]]");
 
-        return listDataGenerator.addDataGenerator(new ComponentDataGenerator<>(
-                componentRenderer, container, "nodeId",
-                (KeyMapper<T>) getDataCommunicator().getKeyMapper()));
+        return dataGenerator.addDataGenerator(
+                new ComponentDataGenerator<>(componentRenderer, container,
+                        "nodeId", getDataCommunicator().getKeyMapper()));
     }
 }
