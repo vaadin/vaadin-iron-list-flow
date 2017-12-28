@@ -133,7 +133,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
 
         template = new Element("template");
         getElement().appendChild(template);
-        setRenderer(item -> String.valueOf(item));
+        setRenderer(String::valueOf);
 
         getElement().getNode()
                 .runWhenAttached(ui -> ui.beforeClientResponse(this,
@@ -226,8 +226,8 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
      * placeholders and actual items.
      * <p>
      * When no placeholder item is set (or when set to <code>null</code>), an
-     * empty placeholder element is created with 100px of width and 18px of
-     * height.
+     * empty placeholder element is created with <code>100px</code> of width and
+     * <code>18px</code> of height.
      * <p>
      * Note: when using {@link ComponentTemplateRenderer}s, the component used
      * for the placeholder is statically stamped in the list. It can not be
@@ -263,15 +263,13 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
              * scrolling.
              */
             placeholderTemplate = "<div style='width:100px;height:18px'></div>";
+        } else if (renderer instanceof ComponentTemplateRenderer) {
+            ComponentTemplateRenderer<?, T> componentRenderer = (ComponentTemplateRenderer<?, T>) renderer;
+            Component component = componentRenderer
+                    .createComponent(placeholderItem);
+            placeholderTemplate = component.getElement().getOuterHTML();
         } else {
-            if (renderer instanceof ComponentTemplateRenderer) {
-                ComponentTemplateRenderer<?, T> componentRenderer = (ComponentTemplateRenderer<?, T>) renderer;
-                Component component = componentRenderer
-                        .createComponent(placeholderItem);
-                placeholderTemplate = component.getElement().getOuterHTML();
-            } else {
-                placeholderTemplate = renderer.getTemplate();
-            }
+            placeholderTemplate = renderer.getTemplate();
         }
 
         /**
