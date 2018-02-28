@@ -40,6 +40,7 @@ import com.vaadin.flow.data.renderer.Rendering;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.internal.ExecutionContext;
 import com.vaadin.flow.internal.JsonSerializer;
 import com.vaadin.flow.internal.JsonUtils;
 import com.vaadin.flow.shared.Registration;
@@ -135,11 +136,20 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         getElement().appendChild(template);
         setRenderer(String::valueOf);
 
-        getElement().getNode()
+        addAttachListener(event -> getElement().getNode()
                 .runWhenAttached(ui -> ui.beforeClientResponse(this,
-                        () -> ui.getPage().executeJavaScript(
-                                "window.ironListConnector.initLazy($0)",
-                                getElement())));
+                        this::resetWhenClientSideNotInitialized)));
+    }
+
+    private void resetWhenClientSideNotInitialized(ExecutionContext context) {
+        // If the client is already initialized, there's no need to reset
+        // everything
+        if (context.isClientSideInitialized()) {
+            return;
+        }
+        context.getUI().getPage().executeJavaScript(
+                "window.ironListConnector.initLazy($0)", getElement());
+        getDataCommunicator().reset();
     }
 
     @Override
