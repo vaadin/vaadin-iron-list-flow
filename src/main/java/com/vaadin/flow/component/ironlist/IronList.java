@@ -26,7 +26,6 @@ import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.data.binder.HasDataProvider;
@@ -127,7 +126,9 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
      * Creates an empty list.
      */
     public IronList() {
-        getElement().getNode().runWhenAttached(this::initConnector);
+        getElement().getNode()
+                .runWhenAttached(ui -> ui.beforeClientResponse(this,
+                        this::resetWhenClientSideNotInitialized));
         dataGenerator.addDataGenerator(
                 (item, jsonObject) -> renderer.getValueProviders()
                         .forEach((property, provider) -> jsonObject.put(
@@ -143,16 +144,16 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
                         this::resetWhenClientSideNotInitialized)));
     }
 
-    private void initConnector(UI ui) {
-        ui.getPage().executeJavaScript("window.ironListConnector.initLazy($0)",
-                getElement());
+    private void initConnector(ExecutionContext context) {
+        context.getUI().getPage().executeJavaScript(
+                "window.ironListConnector.initLazy($0)", getElement());
     }
 
     private void resetWhenClientSideNotInitialized(ExecutionContext context) {
         // If the client is already initialized, there's no need to reset
         // everything
         if (!context.isClientSideInitialized()) {
-            initConnector(context.getUI());
+            initConnector(context);
             getDataCommunicator().reset();
         }
     }
