@@ -103,6 +103,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
             queue.clear();
         }
 
+        @Override
         public void enqueue(String name, Serializable... arguments) {
             queue.add(() -> getElement().callFunction(name, arguments));
         }
