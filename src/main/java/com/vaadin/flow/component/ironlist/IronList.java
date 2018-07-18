@@ -103,8 +103,25 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
             queue.clear();
         }
 
-        private void enqueue(String name, Serializable... arguments) {
+        @Override
+        public void enqueue(String name, Serializable... arguments) {
             queue.add(() -> getElement().callFunction(name, arguments));
+        }
+
+        @Override
+        public void clear(int start, int length, String parentKey) {
+        }
+
+        @Override
+        public void set(int start, List<JsonValue> items, String parentKey) {
+        }
+
+        @Override
+        public void commit(int updateId, String parentKey, int levelSize) {
+        }
+
+        @Override
+        public void commit() {
         }
     }
 
