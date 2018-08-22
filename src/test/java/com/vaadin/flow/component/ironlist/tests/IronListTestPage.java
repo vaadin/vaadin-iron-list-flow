@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.html.Div;
@@ -55,7 +57,7 @@ public class IronListTestPage extends Div {
         }
     }
 
-    private static class Person {
+    public static class Person {
         private String name;
         private int age;
 
@@ -87,6 +89,7 @@ public class IronListTestPage extends Div {
         createLazyLoadingDataProvider();
         createTemplateWithEventHandlers();
         createListWithComponentRenderer();
+        createListWithComponentRendererWithBeansAndPlaceholder();
         createDetachableList();
         createListsWithBasicRenderers();
     }
@@ -258,7 +261,8 @@ public class IronListTestPage extends Div {
         IronList<String> list = new IronList<>();
         list.setHeight("100px");
 
-        List<String> items = Arrays.asList("Item 1", "Item 2", "Item 3");
+        List<String> items = IntStream.range(1, 101).mapToObj(i -> "Item " + i)
+                .collect(Collectors.toList());
 
         list.setRenderer(new ComponentRenderer<>(item -> {
             Label label = new Label(item);
@@ -268,6 +272,28 @@ public class IronListTestPage extends Div {
 
         list.setItems(items);
         list.setId("component-renderer");
+
+        add(list);
+    }
+
+    private void createListWithComponentRendererWithBeansAndPlaceholder() {
+        IronList<Person> list = new IronList<>();
+        list.setHeight("100px");
+
+        List<Person> people = createPeople(100);
+
+        list.setRenderer(new ComponentRenderer<Label, Person>(person -> {
+            Label label = new Label(person.getName());
+            label.addClassName("component-rendered");
+            return label;
+        }));
+
+        list.setItems(people);
+        list.setId("component-renderer-with-beans");
+
+        Person placeholder = new Person();
+        placeholder.setName("the-placeholder");
+        list.setPlaceholderItem(placeholder);
 
         add(list);
     }
