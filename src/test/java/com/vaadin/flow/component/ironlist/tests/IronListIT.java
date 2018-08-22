@@ -17,6 +17,7 @@ package com.vaadin.flow.component.ironlist.tests;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -29,6 +30,7 @@ import org.openqa.selenium.WebElement;
 
 import com.vaadin.flow.testutil.AbstractComponentIT;
 import com.vaadin.flow.testutil.TestPath;
+import com.vaadin.testbench.TestBenchElement;
 
 import elemental.json.Json;
 import elemental.json.JsonArray;
@@ -264,6 +266,48 @@ public class IronListIT extends AbstractComponentIT {
                 (Boolean) executeScript(
                         "return arguments[0].$connector._isUsingTheSameInstance",
                         list));
+    }
+
+    @Test
+    public void nativeButtonRenderer() {
+        List<TestBenchElement> buttons = $("iron-list").id("list-with-buttons")
+                .$("button").all();
+        Assert.assertEquals(3, buttons.size());
+        IntStream.range(0, 3).forEach(i -> {
+            Assert.assertEquals("Person " + (i + 1), buttons.get(i).getText());
+        });
+    }
+
+    @Test
+    public void numberRenderer() {
+        List<TestBenchElement> items = $("iron-list").id("list-with-numbers")
+                .$("span").all();
+        Assert.assertEquals(3, items.size());
+        IntStream.range(0, 3).forEach(i -> {
+            Assert.assertEquals("" + (i + 1), items.get(i).getText());
+        });
+    }
+
+    @Test
+    public void localDateRenderer() {
+        List<TestBenchElement> items = $("iron-list")
+                .id("list-with-local-dates").$("span").all();
+        Assert.assertEquals(3, items.size());
+
+        Assert.assertEquals("January 1, 2001", items.get(0).getText());
+        Assert.assertEquals("February 2, 2002", items.get(1).getText());
+        Assert.assertEquals("March 3, 2003", items.get(2).getText());
+    }
+
+    @Test
+    public void localDateTimeRenderer() {
+        List<TestBenchElement> items = $("iron-list")
+                .id("list-with-local-date-times").$("span").all();
+        Assert.assertEquals(3, items.size());
+
+        Assert.assertEquals("January 1, 2001 1:01 AM", items.get(0).getText());
+        Assert.assertEquals("February 2, 2002 2:02 AM", items.get(1).getText());
+        Assert.assertEquals("March 3, 2003 3:03 AM", items.get(2).getText());
     }
 
     private void assertItemsArePresent(WebElement list, int length) {

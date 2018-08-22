@@ -15,9 +15,12 @@
  */
 package com.vaadin.flow.component.ironlist.tests;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.html.Div;
@@ -27,6 +30,11 @@ import com.vaadin.flow.component.ironlist.IronList;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.LocalDateRenderer;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
+import com.vaadin.flow.data.renderer.NumberRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Route;
@@ -80,6 +88,7 @@ public class IronListTestPage extends Div {
         createTemplateWithEventHandlers();
         createListWithComponentRenderer();
         createDetachableList();
+        createListsWithBasicRenderers();
     }
 
     private void createListWithStrings() {
@@ -294,6 +303,42 @@ public class IronListTestPage extends Div {
         visible.setId("detachable-list-visible");
         add(container1, container2, detach, attach1, attach2, invisible,
                 visible);
+    }
+
+    private void createListsWithBasicRenderers() {
+        IronList<Person> listWithButtons = createIronList(
+                new NativeButtonRenderer<>(Person::getName));
+        listWithButtons.setId("list-with-buttons");
+
+        IronList<Person> listWithNumbers = createIronList(
+                new NumberRenderer<>(Person::getAge, Locale.ROOT));
+        listWithNumbers.setId("list-with-numbers");
+
+        IronList<Person> listWithLocalDates = createIronList(
+                new LocalDateRenderer<>(
+                        person -> LocalDate.of(2000 + person.getAge(),
+                                person.getAge(), person.getAge())));
+        listWithLocalDates.setId("list-with-local-dates");
+
+        IronList<Person> listWithLocalDateTimes = createIronList(
+                new LocalDateTimeRenderer<>(person -> LocalDateTime.of(
+                        2000 + person.getAge(), person.getAge(),
+                        person.getAge(), person.getAge(), person.getAge())));
+        listWithLocalDateTimes.setId("list-with-local-date-times");
+
+        add(listWithButtons, listWithNumbers, listWithLocalDates,
+                listWithLocalDateTimes);
+    }
+
+    private IronList<Person> createIronList(Renderer<Person> renderer) {
+        IronList<Person> list = new IronList<>();
+        list.setHeight("100px");
+
+        List<Person> people = createPeople(3);
+        list.setItems(people);
+
+        list.setRenderer(renderer);
+        return list;
     }
 
     private List<Person> createPeople(int amount) {
