@@ -146,11 +146,14 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         template = new Element("template");
         getElement().appendChild(template);
         setRenderer(String::valueOf);
+
+        // Fixes zero width in flex layouts
+        getStyle().set("flex", "auto").set("align-self", "stretch");
     }
 
     private void initConnector() {
         getUI().orElseThrow(() -> new IllegalStateException(
-                "Connector can only be initialized for an attached Grid"))
+                "Connector can only be initialized for an attached IronList"))
                 .getPage().executeJavaScript(
                         "window.Vaadin.Flow.ironListConnector.initLazy($0)",
                         getElement());
