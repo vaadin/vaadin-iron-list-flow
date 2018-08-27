@@ -28,6 +28,7 @@ import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dependency.JavaScript;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.data.binder.HasDataProvider;
 import com.vaadin.flow.data.provider.ArrayUpdater;
 import com.vaadin.flow.data.provider.ArrayUpdater.Update;
@@ -75,6 +76,7 @@ import elemental.json.JsonValue;
 @HtmlImport("frontend://bower_components/iron-list/iron-list.html")
 @HtmlImport("frontend://flow-component-renderer.html")
 @JavaScript("frontend://ironListConnector.js")
+@StyleSheet("frontend://ironListStyles.css")
 public class IronList<T> extends Component implements HasDataProvider<T>,
         HasStyle, HasSize, Focusable<IronList<T>> {
 
@@ -146,9 +148,6 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         template = new Element("template");
         getElement().appendChild(template);
         setRenderer(String::valueOf);
-
-        // Fixes zero width in flex layouts
-        getStyle().set("flex", "auto").set("align-self", "stretch");
     }
 
     private void initConnector() {
