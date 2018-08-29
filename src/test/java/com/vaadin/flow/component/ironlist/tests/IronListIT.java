@@ -372,6 +372,29 @@ public class IronListIT extends AbstractComponentIT {
         Assert.assertEquals("March 3, 2003 3:03 AM", items.get(2).getText());
     }
 
+    @Test
+    public void ironListInsideFlexContainer_hasNonZeroWidthAndHeight() {
+        TestBenchElement ironList = $("iron-list")
+                .id("list-inside-flex-container");
+
+        assertWidthAndHeightInFlexContainer(ironList);
+
+        $("button").id("set-flex-direction-column").click();
+        assertWidthAndHeightInFlexContainer(ironList);
+    }
+
+    private void assertWidthAndHeightInFlexContainer(
+            TestBenchElement ironList) {
+        Assert.assertTrue(
+                "IronList should not have zero width by default "
+                        + "when used inside a flex container.",
+                ironList.getPropertyInteger("clientWidth") > 0);
+        Assert.assertTrue(
+                "IronList should not have zero height by default "
+                        + "when used inside a flex container.",
+                ironList.getPropertyInteger("clientHeight") > 0);
+    }
+
     private void scrollToBottom(WebElement ironList) {
         executeScript("arguments[0].scrollBy(0,10000);", ironList);
     }

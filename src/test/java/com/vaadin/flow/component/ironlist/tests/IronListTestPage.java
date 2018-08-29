@@ -92,6 +92,7 @@ public class IronListTestPage extends Div {
         createListWithComponentRendererWithBeansAndPlaceholder();
         createDetachableList();
         createListsWithBasicRenderers();
+        createListInsideFlexContainer();
     }
 
     private void createListWithStrings() {
@@ -365,6 +366,22 @@ public class IronListTestPage extends Div {
 
         list.setRenderer(renderer);
         return list;
+    }
+
+    private void createListInsideFlexContainer() {
+        IronList<String> list = new IronList<>();
+        list.setId("list-inside-flex-container");
+        list.setItems("Item 1", "Item 2", "Item 3");
+
+        Div flexContainer = new Div(list);
+        flexContainer.getStyle().set("display", "flex");
+
+        NativeButton setFlexDirectionColumn = new NativeButton(
+                "Set 'flex-direction: column'",
+                e -> flexContainer.getStyle().set("flex-direction", "column"));
+        setFlexDirectionColumn.setId("set-flex-direction-column");
+
+        add(flexContainer, setFlexDirectionColumn);
     }
 
     private List<Person> createPeople(int amount) {
