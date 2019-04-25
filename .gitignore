@@ -9,3 +9,7 @@ target/
 # Selenium
 error-screenshots
 reference-screenshots
+
+package*.json
+webpack.config.js
+**/node_modules/
