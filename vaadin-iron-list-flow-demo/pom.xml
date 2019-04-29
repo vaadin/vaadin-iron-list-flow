@@ -12,19 +12,15 @@
 
     <artifactId>vaadin-iron-list-flow-demo</artifactId>
     <packaging>${packaging.type}</packaging>
-
     <name>Vaadin IronList Flow Demo</name>
 
-    <properties>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-    </properties>
     <dependencies>
+        <!-- Flow -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>flow-client</artifactId>
             <version>${flow.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>flow-data</artifactId>
@@ -44,13 +40,6 @@
             <artifactId>flow-component-demo-helpers</artifactId>
             <version>${flow.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
-        </dependency>
-
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-ordered-layout-flow</artifactId>
@@ -58,6 +47,11 @@
         </dependency>
 
         <!-- externals -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
+        </dependency>
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
@@ -133,5 +127,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
