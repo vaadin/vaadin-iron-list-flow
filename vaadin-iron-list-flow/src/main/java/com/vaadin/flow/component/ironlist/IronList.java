@@ -91,7 +91,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         HasStyle, HasSize, Focusable<IronList<T>> {
 
     private final class UpdateQueue implements Update {
-        private List<Runnable> queue = new ArrayList<>();
+        private transient List<Runnable> queue = new ArrayList<>();
 
         private UpdateQueue(int size) {
             enqueue("$connector.updateSize", size);
@@ -140,7 +140,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
 
     private final CompositeDataGenerator<T> dataGenerator = new CompositeDataGenerator<>();
     private Registration dataGeneratorRegistration;
-    private T placeholderItem;
+    private transient T placeholderItem;
 
     private final DataCommunicator<T> dataCommunicator = new DataCommunicator<>(
             dataGenerator, arrayUpdater,
@@ -181,7 +181,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
      *
      * @return the data provider of this list, not {@code null}
      */
-    public DataProvider<T, ?> getDataProvider() {
+    public DataProvider<T, ?> getDataProvider() { //NOSONAR
         return getDataCommunicator().getDataProvider();
     }
 
