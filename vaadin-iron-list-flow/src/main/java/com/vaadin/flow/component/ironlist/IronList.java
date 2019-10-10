@@ -141,6 +141,8 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
     private final CompositeDataGenerator<T> dataGenerator = new CompositeDataGenerator<>();
     private Registration dataGeneratorRegistration;
     private transient T placeholderItem;
+    private String placeholderWidth = "100px";
+    private String placeholderHeight = "18px";
 
     private final DataCommunicator<T> dataCommunicator = new DataCommunicator<>(
             dataGenerator, arrayUpdater,
@@ -255,7 +257,9 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
      * <p>
      * When no placeholder item is set (or when set to <code>null</code>), an
      * empty placeholder element is created with <code>100px</code> of width and
-     * <code>18px</code> of height.
+     * <code>18px</code> of height, if not otherwise specified with
+     * {@link #setPlaceholderWidth(String)} and
+     * {@link #setPlaceholderHeight(String)}.
      * <p>
      * Note: when using {@link ComponentTemplateRenderer}s, the component used
      * for the placeholder is statically stamped in the list. It can not be
@@ -281,6 +285,54 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
      */
     public T getPlaceholderItem() {
         return placeholderItem;
+    }
+
+    /**
+     * Sets the width of the default placeholder template, used if no
+     * placeholder item is set. Should be a valid CSS dimension, e.g.
+     * <code>"100px"</code>.
+     *
+     * @see #setPlaceholderHeight(String)
+     * @param placeholderWidth
+     *            the default placeholder width
+     */
+    public void setPlaceholderWidth(String placeholderWidth) {
+        Objects.requireNonNull(placeholderWidth);
+        this.placeholderWidth = placeholderWidth;
+    }
+
+    /**
+     * Gets the width of the default placeholder template.
+     *
+     * @see #setPlaceholderWidth(String)
+     * @return the default placeholder width
+     */
+    public String getPlaceholderWidth() {
+        return this.placeholderWidth;
+    }
+
+    /**
+     * Sets the height of the default placeholder template, used if no
+     * placeholder item is set. Should be a valid CSS dimension, e.g.
+     * <code>"18px"</code>.
+     *
+     * @see #setPlaceholderWidth(String)
+     * @param placeholderHeight
+     *            the default placeholder height
+     */
+    public void setPlaceholderHeight(String placeholderHeight) {
+        Objects.requireNonNull(placeholderHeight);
+        this.placeholderHeight = placeholderHeight;
+    }
+
+    /**
+     * Gets the height of the default placeholder template.
+     *
+     * @see #setPlaceholderHeight(String)
+     * @return the default placeholder height
+     */
+    public String getPlaceholderHeight() {
+        return this.placeholderHeight;
     }
 
     private void registerTemplateUpdate() {
@@ -320,7 +372,8 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
              * placeholder element with a non 0 size to avoid issues when
              * scrolling.
              */
-            placeholderTemplate = "<div style='width:100px;height:18px'></div>";
+            placeholderTemplate = "<div style=\"width: " + this.placeholderWidth
+                    + "; height: " + this.placeholderHeight + "\"></div>";
         } else if (renderer instanceof ComponentRenderer) {
             @SuppressWarnings("unchecked")
             ComponentRenderer<?, T> componentRenderer = (ComponentRenderer<?, T>) renderer;
