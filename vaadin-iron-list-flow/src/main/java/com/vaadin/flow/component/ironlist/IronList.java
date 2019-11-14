@@ -371,6 +371,21 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         getElement().setProperty("grid", gridLayout);
     }
 
+    /**
+     * Sets the component that will handle the scroll event on the behalf of the
+     * current component.
+     *
+     * @param scrollTarget
+     *            the component that will handle the scroll
+     */
+    public void setScrollTarget(Component scrollTarget) {
+        if (scrollTarget == null) {
+            scrollTarget = this;
+        }
+        getElement().executeJs("this.scrollTarget = $0",
+                scrollTarget.getElement());
+    }
+
     @Override
     public void onEnabledStateChanged(boolean enabled) {
         super.onEnabledStateChanged(enabled);
