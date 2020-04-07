@@ -15,5 +15,7 @@ error-screenshots
 reference-screenshots
 
 package*.json
-webpack.config.js
-**/node_modules/
+webpack.*.js
+tsconfig.json
+types.d.ts
+node_modules/
