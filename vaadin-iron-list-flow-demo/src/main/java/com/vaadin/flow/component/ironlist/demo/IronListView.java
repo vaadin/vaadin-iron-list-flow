@@ -165,6 +165,7 @@ public class IronListView extends DemoView {
 
         List<String> items = Arrays.asList("Item 1", "Item 2", "Item 3");
         list.setItems(items);
+        add(list);
         // end-source-example
 
         list.setId("list-of-strings");
@@ -183,6 +184,7 @@ public class IronListView extends DemoView {
                 query -> countStringsFromDatabase(query));
 
         list.setDataProvider(dataProvider);
+        add(list);
         // end-source-example
 
         list.setId("list-of-strings-with-dataprovider");
@@ -205,6 +207,7 @@ public class IronListView extends DemoView {
                         + "border:1px solid lightgray; border-radius:5px;'>"
                         + "#[[index]]. [[item.fact]]</div>")
                 .withProperty("fact", ValueProvider.identity()));
+        add(list);
         // end-source-example
 
         list.setId("chuck-norris-facts");
@@ -244,6 +247,7 @@ public class IronListView extends DemoView {
         placeholder.setFirstName("-----");
         placeholder.setPicture("//:0");
         list.setPlaceholderItem(placeholder);
+        add(list);
         // end-source-example
         //@formatter:on
 
@@ -298,6 +302,7 @@ public class IronListView extends DemoView {
                     items.remove(item);
                     list.getDataCommunicator().reset();
                 }));
+        add(list);
         // end-source-example
 
         list.setId("using-events-with-templates");
@@ -345,6 +350,7 @@ public class IronListView extends DemoView {
                 }));
         NativeButton switchEnabled = new NativeButton("Switch enabled state",
                 event -> list.setEnabled(!list.isEnabled()));
+        add(list, removalResult, switchEnabled);
         // end-source-example
 
         list.setId("disabled-list-with-templates");
@@ -380,6 +386,7 @@ public class IronListView extends DemoView {
 
         NativeButton switchEnabled = new NativeButton("Switch enabled state",
                 event-> list.setEnabled(!list.isEnabled()));
+        add(list, switchEnabled);
         // end-source-example
         //@formatter:on
 
