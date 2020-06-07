@@ -36,6 +36,7 @@ import com.vaadin.flow.component.ironlist.IronList;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
@@ -196,8 +197,7 @@ public class IronListView extends DemoView {
         IronList<String> list = new IronList<>();
         list.setHeight("400px");
 
-        DataProvider<String, ?> dataProvider = DataProvider.fromCallbacks(
-                query -> createFacts(query.getLimit()-query.getOffset()), query -> 1000);
+        DataProvider<String, ?> dataProvider = DataProvider.ofCollection(createFacts(1000));
 
         list.setDataProvider(dataProvider);
         list.setRenderer(TemplateRenderer.<String> of(
@@ -417,18 +417,19 @@ public class IronListView extends DemoView {
         return list;
     }
 
-    private static Stream<String> createFacts(int number) {
-        number = Math.min(number, 1000);
+    private static List<String> createFacts(int number) {
+        number = Math.max(0, Math.min(number, 1000));
         List<String> list = new ArrayList<>(number);
         Faker faker = Faker.instance();
         for (int i = 0; i < number; i++) {
             list.add(faker.chuckNorris().fact());
         }
-        return list.stream();
+        return list;
     }
 
     private static List<String> createListOfStrings(int number,
             Supplier<String> supplier) {
+        number = Math.max(0, Math.min(number, 1000));
         List<String> list = new ArrayList<>(number);
         for (int i = 0; i < number; i++) {
             list.add(supplier.get());
