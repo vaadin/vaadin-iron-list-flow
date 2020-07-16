@@ -150,6 +150,12 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
 
         template = new Element("template");
         getElement().appendChild(template);
+        /*
+         * Since IronList does not support pages, this forces the data
+         * communicator to operate with items limit, not with the page
+         * number and page size.
+         */
+        getDataCommunicator().setMultiplePagesOverLimit(false);
         setRenderer(String::valueOf);
     }
 
