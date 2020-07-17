@@ -155,7 +155,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
          * communicator to operate with items limit, not with the page
          * number and page size.
          */
-        getDataCommunicator().setMultiplePagesOverLimit(false);
+        getDataCommunicator().setPagingEnabled(false);
         setRenderer(String::valueOf);
     }
 
