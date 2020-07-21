@@ -27,7 +27,7 @@ public class IronListTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
-    public void paging_pagingDisabledByDefault() throws NoSuchFieldException, IllegalAccessException {
+    public void paging_pagingDisabledByDefault() {
         IronList<String> ironList = new IronList<>();
         Assert.assertFalse("IronList is not supposed to support the paging",
                 ironList.getDataCommunicator().isPagingEnabled());
