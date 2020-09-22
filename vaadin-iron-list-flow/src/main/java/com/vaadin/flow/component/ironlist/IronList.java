@@ -132,6 +132,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         }
     };
 
+    private String ITEMS_BUFFER = "items-buffer";
     private final Element template;
     private Renderer<T> renderer;
     private String originalTemplate;
@@ -384,7 +385,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
             throw new IllegalArgumentException(
                     "Items buffer cannot be negative");
         }
-        getElement().setAttribute("items-buffer", String.valueOf(itemsBuffer));
+        getElement().setAttribute(ITEMS_BUFFER, String.valueOf(itemsBuffer));
     }
 
     /**
@@ -395,8 +396,8 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
      * @return number of buffered items
      */
     public int getItemsBuffer() {
-        return getElement().hasAttribute("items-buffer")
-                ? Integer.parseInt(getElement().getAttribute("items-buffer"))
+        return getElement().hasAttribute(ITEMS_BUFFER)
+                ? Integer.parseInt(getElement().getAttribute(ITEMS_BUFFER))
                 : 20;
     }
 
