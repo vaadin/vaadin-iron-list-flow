@@ -371,6 +371,35 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         getElement().setProperty("grid", gridLayout);
     }
 
+    /**
+     * Sets the number of items which are fetched as a buffer. The first fetch
+     * of the iron-list fetches per default minimum 3 items. Therefore the total
+     * number of items in the first fetch is minimum 3 + itemsBuffer.
+     *
+     * @param itemsBuffer
+     *            number of buffered items
+     */
+    public void setItemsBuffer(int itemsBuffer) {
+        if (itemsBuffer < 0) {
+            throw new IllegalArgumentException(
+                    "Items buffer cannot be negative");
+        }
+        getElement().setAttribute("items-buffer", String.valueOf(itemsBuffer));
+    }
+
+    /**
+     * Returns the number of items, which are fetched as a buffer. If there is
+     * no custom value set, the default value of 20, defined in the connector is
+     * returned.
+     *
+     * @return number of buffered items
+     */
+    public int getItemsBuffer() {
+        return getElement().hasAttribute("items-buffer")
+                ? Integer.parseInt(getElement().getAttribute("items-buffer"))
+                : 20;
+    }
+
     @Override
     public void onEnabledStateChanged(boolean enabled) {
         super.onEnabledStateChanged(enabled);
