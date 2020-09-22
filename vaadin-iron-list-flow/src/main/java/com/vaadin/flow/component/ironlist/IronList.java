@@ -132,7 +132,7 @@ public class IronList<T> extends Component implements HasDataProvider<T>,
         }
     };
 
-    private String ITEMS_BUFFER = "items-buffer";
+    private static final String ITEMS_BUFFER = "items-buffer";
     private final Element template;
     private Renderer<T> renderer;
     private String originalTemplate;
