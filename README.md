@@ -1,3 +1,8 @@
+⚠️ **This repository is deprecated**
+- Sources for this flow component can be found at https://github.com/vaadin/vaadin-flow-component
+- Tickets has been moved to the web component repository https://github.com/vaadin/vaadin-flow-components/issues
+
+
 # IronList component for Vaadin Flow
 
 This project is the Component wrapper implementation of [`<iron-list>`](https://github.com/PolymerElements/iron-list) element
